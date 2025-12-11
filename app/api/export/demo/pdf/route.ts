@@ -1,3 +1,9 @@
+// Prevent static export; ensure this runs at request time on the server.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+// (Optional, but explicit:)
+export const runtime = "nodejs";
+
 import { NextResponse } from "next/server";
 import PDFDocument from "pdfkit";
 
@@ -12,10 +18,12 @@ export async function GET() {
 
   doc.fontSize(18).text("RiskLens – Demo PDF", { underline: true });
   doc.moveDown();
-  doc.fontSize(12).text(
-    "This is a demo export endpoint. In a full version, we would render a styled risk report " +
-      "with flags, comments, and summary metrics."
-  );
+  doc
+    .fontSize(12)
+    .text(
+      "This is a demo export endpoint. In a full version, we would render a styled risk report " +
+        "with flags, comments, and summary metrics."
+    );
   doc.end();
 
   const buf = await done;
